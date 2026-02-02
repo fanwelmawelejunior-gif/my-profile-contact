@@ -1,5 +1,5 @@
 const express = require("express");
-const { Pool } = require("pg");
+const { Pool} = require("pg");
 const path = require("path");
 
 const app = express();
@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-const pool = new Pool({
+const pool= new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
