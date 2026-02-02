@@ -37,7 +37,7 @@ app.post('/submit', async (req, res) => {
 
 // Catch-all route to serve index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'mydesign.html'));
 });
 
 const PORT = process.env.PORT || 3000;
