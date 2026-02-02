@@ -5,7 +5,6 @@ const path = require('path');
 const app = express();
 app.use(express.json());
 
-// Serve static files from public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = new Pool({
@@ -36,9 +35,9 @@ app.post('/submit', async (req, res) => {
   }
 });
 
-// This handles GET / and serves index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'mydesign.html'));
+// Catch-all route to serve index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
