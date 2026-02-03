@@ -10,6 +10,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL
 });
+(async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(100),
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('Contacts table ready');
+  } catch (err) {
+    console.error('Error creating table:', err.message);
+  }
+})();
 
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
