@@ -4,7 +4,6 @@ const path = require('path');
 
 const app = express();
 app.use(express.json());
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = new Pool({
@@ -12,31 +11,35 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-pool.query(`
-CREATE TABLE IF NOT EXISTS contacts (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(50) NOT NULL,
-  email VARCHAR(100) UNIQUE,
-  message TEXT
-);
-`);
+(async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS contacts (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(50) NOT NULL,
+      email VARCHAR(100),
+      message TEXT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+})();
 
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
+
   try {
     await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)',
       [name, email, message]
     );
-    res.send('Message received. Thank you!');
+
+    res.send('Message received successfully. We will contact you.');
   } catch (err) {
     console.error(err);
     res.status(500).send('Error saving message');
   }
 });
 
-// Catch-all route to serve index.html
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'mydesign.html'));
 });
 
