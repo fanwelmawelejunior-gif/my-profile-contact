@@ -3,53 +3,18 @@ const { Pool } = require('pg');
 const path = require('path');
 
 const app = express();
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-    rejectUnauthorized: false
-  },
-  max: 3,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 10000,
-  keepAlive: true
+  connectionString: process.env.DATABASE_URL
 });
-pool.on('error', (err) => {
-  console.error('Unexpected PG error', err);
-});
-
-
-let dbReady = false;
-
-async function initDB() {
-  if (dbReady) return;
-
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS contacts (
-        id SERIAL PRIMARY KEY,
-        name VARCHAR(50) NOT NULL,
-        email VARCHAR(100),
-        message TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
-    dbReady = true;
-    console.log('Database ready');
-  } catch (err) {
-    console.error('DB init failed, retrying...', err.message);
-  }
-}
 
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
 
   try {
-    await initDB();
-
     await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)',
       [name, email, message]
@@ -57,10 +22,9 @@ app.post('/submit', async (req, res) => {
 
     res.send('Message received successfully. We will contact you.');
   } catch (err) {
-  console.error('DB ERROR:', err.message);
-  res.status(500).send(err.message);
-}
-
+    console.error(err);
+    res.status(500).send('Database error');
+  }
 });
 
 app.get('/', (req, res) => {
@@ -68,4 +32,4 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('Server running'));
+app.listen(PORT);
