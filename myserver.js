@@ -46,9 +46,10 @@ app.post('/submit', async (req, res) => {
 
     res.send('Message received successfully. We will contact you.');
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error saving message');
-  }
+  console.error('DB ERROR:', err.message);
+  res.status(500).send(err.message);
+}
+
 });
 
 app.get('/', (req, res) => {
