@@ -11,22 +11,34 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }
 });
 
-(async () => {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS contacts (
-      id SERIAL PRIMARY KEY,
-      name VARCHAR(50) NOT NULL,
-      email VARCHAR(100),
-      message TEXT,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-})();
+let dbReady = false;
+
+async function initDB() {
+  if (dbReady) return;
+
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        email VARCHAR(100),
+        message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    dbReady = true;
+    console.log('Database ready');
+  } catch (err) {
+    console.error('DB init failed, retrying...', err.message);
+  }
+}
 
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
 
   try {
+    await initDB();
+
     await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)',
       [name, email, message]
@@ -44,4 +56,4 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT);
+app.listen(PORT, () => console.log('Server running'));
