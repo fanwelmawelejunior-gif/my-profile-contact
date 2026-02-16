@@ -749,7 +749,7 @@ margin-bottom: 40px;
 }
 @media(max-width:480px){
   .contact-header h1{
-    font-size: 3rem;
+    font-size: 2rem;
     padding: 0 1rem;
     white-space: nowrap;
   }
