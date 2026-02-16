@@ -740,14 +740,14 @@ margin-bottom: 40px;
   justify-content: center;
   background-color:lightblue;
   width: 100%;
-  padding: 30px;
+  padding: 20px;
   border-radius: 15px;
   gap: 10px;
 }
 .contact-header h1{
   width: 100%;
 }
-@media(max-width:480){
+@media(max-width:480px){
   .contact-header h1{
     font-size: 3rem;
     padding: 0 1rem;
