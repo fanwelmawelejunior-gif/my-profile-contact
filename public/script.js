@@ -52,7 +52,7 @@ form.addEventListener('submit', async (e) => {
             // Show alert
             alert(msg);
 
-            // ✅ Remove this line so the form stays visible
+            //  Remove this line so the form stays visible
             // form.style.display='none';
 
             // Optional: clear inputs but keep form visible
