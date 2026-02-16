@@ -747,6 +747,13 @@ margin-bottom: 40px;
 .contact-header h1{
   width: 100%;
 }
+@media(max-width:480){
+  .contact-header h1{
+    font-size: 3rem;
+    padding: 0 1rem;
+    white-space: nowrap;
+  }
+}
 /* ===== RESPONSIVE DESIGN ===== */
 /* Mobile First - Extra Small Devices (up to 576px) */
 @media (max-width: 576px) {
