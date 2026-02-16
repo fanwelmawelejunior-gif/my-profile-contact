@@ -744,7 +744,9 @@ margin-bottom: 40px;
   border-radius: 15px;
   gap: 10px;
 }
-
+.contact-header h1{
+  width: 100%;
+}
 /* ===== RESPONSIVE DESIGN ===== */
 /* Mobile First - Extra Small Devices (up to 576px) */
 @media (max-width: 576px) {
