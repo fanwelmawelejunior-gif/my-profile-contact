@@ -817,7 +817,7 @@ margin-bottom: 40px;
   }
 }
 
-/* Medium Devices (769px to 992px) */
+/* Medium Devices */
 @media (min-width: 769px) and (max-width: 992px) {
   .wd, .wc, .cu {
     width: 90% !important;
