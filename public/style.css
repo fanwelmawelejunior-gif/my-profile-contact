@@ -1,93 +1,24 @@
-.header {
-    font-size: 1.5em;
-}
+/* Original styles from public/style.css */
 
-.hamburger {
-    display: none;
-}
-
-.menu {
-    display: flex;
-}
-
-section {
-    padding: 20px;
-}
-
-button {
-    padding: 10px;
-}
-
-.contact-form {
-    display: block;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
-    .header {
-        font-size: 1.2em;
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+    /* Styles for mobile devices */
+    body {
+        font-size: 14px;
     }
-    .hamburger {
-        display: block;
-    }
-    .menu {
-        display: none;
-    }
-    section {
+    .container {
         padding: 10px;
     }
-    button {
-        width: 100%;
-    }
-    .contact-form {
-        flex-direction: column;
-    }
+    /* Add more rules as needed */
 }
 
-@media (min-width: 601px) and (max-width: 768px) {
-    .header {
-        font-size: 1.4em;
+@media (min-width: 769px) {
+    /* Styles for larger screens */
+    body {
+        font-size: 18px;
     }
-    .menu {
-        display: flex;
-        flex-direction: column;
-    }
-    section {
-        padding: 15px;
-    }
-    button {
-        width: auto;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-    .header {
-        font-size: 1.6em;
-    }
-    .menu {
-        display: flex;
-    }
-    section {
+    .container {
         padding: 20px;
     }
-}
-
-@media (min-width: 1025px) {
-    .header {
-        font-size: 2em;
-    }
-    .hamburger {
-        display: none;
-    }
-    .menu {
-        display: flex;
-    }
-    section {
-        padding: 30px;
-    }
+    /* Add more rules as needed */
 }
