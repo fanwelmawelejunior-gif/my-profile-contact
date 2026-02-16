@@ -406,6 +406,9 @@ margin: 0 auto;
   background-color: purple;
   width: 90%;
   margin: 0 auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 /*about .........info............. design*/
 .aboutinfo{
