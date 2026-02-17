@@ -64,12 +64,16 @@ app.post('/submit', async (req, res) => {
     );
 
     // 2️Send email to business email
-await transporter.sendMail({
+const info = await transporter.sendMail({
   from: '"FanwellTechLabs" <fanwelmawelejunior@gmail.com>',
-  to: "fanwelmawelejunior@gmail.com",
+  to: "info@fanwelltechlabs.com",
   replyTo: email,
-  subject: "New Contact Form Message",
-  text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+subject: `New message from ${name} - FanwellTechLabs`,
+  text: `You have received a new message:
+
+Name: ${name}
+Email: ${email}
+Message: ${message}`
 });
 
 console.log("EMAIL SENT SUCCESSFULLY");
