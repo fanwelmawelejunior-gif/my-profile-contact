@@ -1,15 +1,22 @@
+// server.js
 const express = require('express');
 const { Pool } = require('pg');
+const nodemailer = require('nodemailer');
 const path = require('path');
 
 const app = express();
 
+// Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// PostgreSQL connection
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // Required for Render Postgres
 });
+
+// Create contacts table if it doesn't exist
 (async () => {
   try {
     await pool.query(`
@@ -27,25 +34,55 @@ const pool = new Pool({
   }
 })();
 
+// Nodemailer setup (Gmail SMTP)
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER || 'fanwelmawelejunior@gmail.com', // optional override via env
+    pass: process.env.GMAIL_APP_PASSWORD
+  }
+});
+
+// Health check (optional but good for Render)
+app.get('/health', (req, res) => res.send('Server is running!'));
+
+// Submit route — store in DB AND send email
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
 
+  if (!name || !email || !message) {
+    return res.status(400).send('Please fill in all fields.');
+  }
+
   try {
+    // 1️⃣ Save to PostgreSQL
     await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)',
       [name, email, message]
     );
 
-    res.send('Message received successfully. We will contact you.');
+    // 2️⃣ Send email to business email
+    await transporter.sendMail({
+      from: email, // visitor's email
+      to: 'info@fanwelltechlabs.com', // your business email
+      subject: 'New Contact Form Message',
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+    });
+
+    // 3️⃣ Respond to frontend
+    res.status(200).send('Message received successfully. We will contact you.');
+
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Database error');
+    console.error('Error in /submit:', err);
+    res.status(500).send('Error saving message or sending email.');
   }
 });
 
+// Serve frontend
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'mydesign.html'));
+  res.sendFile(path.join(__dirname, 'public', 'contact.html'));
 });
 
+// Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT);
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
