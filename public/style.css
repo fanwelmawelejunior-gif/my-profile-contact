@@ -754,16 +754,19 @@ margin-bottom: 40px;
   width: 100%;
 }
 @media(max-width:480px){
-  .contact-header h1{
+  .contact-header h2{
     font-size: 1.5rem;
     padding: 0 1rem;
     white-space: nowrap;
+      display: block;
+    text-align: center;
   }
 }
 /* ===== RESPONSIVE DESIGN ===== */
 /* Mobile First - Extra Small Devices (up to 576px) */
 @media (max-width: 576px) {
   .wd, .wc, .cu, .about-cta a, .cont a, .brief-intro a {
+  
     width: 100% !important;
     max-width: 90%;
     padding: 15px;
