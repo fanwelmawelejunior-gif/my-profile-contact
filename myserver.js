@@ -36,9 +36,11 @@ const pool = new Pool({
 
 // Nodemailer setup (Gmail SMTP)
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.GMAIL_USER || 'fanwelmawelejunior@gmail.com', // optional override via env
+    user: "fanwelmawelejunior@gmail.com",
     pass: process.env.GMAIL_APP_PASSWORD
   }
 });
@@ -62,17 +64,17 @@ app.post('/submit', async (req, res) => {
     );
 
     // 2️Send email to business email
-   await transporter.sendMail({
-  from: 'fanwelmawelejunior@gmail.com',
-  to: 'info@fanwelltechlabs.com',
-  subject: 'New Contact Form Message - FanwellTechLabs',
-  text: `You have received a new message:
-
-Name: ${name}
-Email: ${email}
-Message: ${message}`
+await transporter.sendMail({
+  from: '"FanwellTechLabs" <fanwelmawelejunior@gmail.com>',
+  to: "fanwelmawelejunior@gmail.com",
+  replyTo: email,
+  subject: "New Contact Form Message",
+  text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
 });
 
+console.log("EMAIL SENT SUCCESSFULLY");
+
+  
 
     // 3️ Respond to frontend
     res.status(200).send('Message received successfully. We will contact you.');
