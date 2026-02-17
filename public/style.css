@@ -681,6 +681,12 @@ margin-bottom: 40px;
   font-size: 24px;
   margin-left: 150px;
 }
+@media(max-width:480px){
+  .home-what-we-do a,.home-what-we-do h3{
+    display: inline-block;
+    text-align: center;
+  }
+}
 .home-what-we-do h3{
   color: rgb(158, 41, 158);
   font-size: 32px;
