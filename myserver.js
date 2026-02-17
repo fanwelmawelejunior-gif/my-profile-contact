@@ -55,21 +55,26 @@ app.post('/submit', async (req, res) => {
   }
 
   try {
-    // 1️⃣ Save to PostgreSQL
+    // 1️ Save to PostgreSQL
     await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)',
       [name, email, message]
     );
 
-    // 2️⃣ Send email to business email
-    await transporter.sendMail({
-      from: email, // visitor's email
-      to: 'info@fanwelltechlabs.com', // your business email
-      subject: 'New Contact Form Message',
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-    });
+    // 2️Send email to business email
+   await transporter.sendMail({
+  from: 'fanwelmawelejunior@gmail.com',
+  to: 'info@fanwelltechlabs.com',
+  subject: 'New Contact Form Message - FanwellTechLabs',
+  text: `You have received a new message:
 
-    // 3️⃣ Respond to frontend
+Name: ${name}
+Email: ${email}
+Message: ${message}`
+});
+
+
+    // 3️ Respond to frontend
     res.status(200).send('Message received successfully. We will contact you.');
 
   } catch (err) {

@@ -752,6 +752,10 @@ margin-bottom: 40px;
 }
 .contact-header h2{
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 @media(max-width:480px){
   .contact-header h2{
