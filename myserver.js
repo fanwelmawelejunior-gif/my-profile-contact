@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const { Pool } = require('pg');
 const nodemailer = require('nodemailer');
@@ -6,17 +5,14 @@ const path = require('path');
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// PostgreSQL connection
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // Required for Render Postgres
+  ssl: { rejectUnauthorized: false }
 });
 
-// Create contacts table if it doesn't exist
 (async () => {
   try {
     await pool.query(`
@@ -34,7 +30,6 @@ const pool = new Pool({
   }
 })();
 
-// Nodemailer setup (Gmail SMTP)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
@@ -45,10 +40,8 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Health check (optional but good for Render)
 app.get('/health', (req, res) => res.send('Server is running!'));
 
-// Submit route — store in DB AND send email
 app.post('/submit', async (req, res) => {
   const { name, email, message } = req.body;
 
@@ -57,27 +50,21 @@ app.post('/submit', async (req, res) => {
   }
 
   try {
-    // 1️ Save to PostgreSQL
     await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3)',
       [name, email, message]
     );
 
-    // 2️Send email to business email
-await transporter.sendMail({
-  from: '"fanwelltechlabs" <fanwelmawelejunior@gmail.com>',
-  to: "fanwelmawelejunior@gmail.com",
-  replyTo: email,
-  subject: `New message from ${name} - FanwellTechLabs`,
-  text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
-});
+    await transporter.sendMail({
+      from: '"fanwelltechlabs" <fanwelmawelejunior@gmail.com>',
+      to: "fanwelmawelejunior@gmail.com",
+      replyTo: email,
+      subject: `New message from ${name} - FanwellTechLabs`,
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+    });
 
+    console.log("EMAIL SENT SUCCESSFULLY");
 
-console.log("EMAIL SENT SUCCESSFULLY");
-
-  
-
-    // 3️ Respond to frontend
     res.status(200).send('Message received successfully. We will contact you.');
 
   } catch (err) {
@@ -86,11 +73,9 @@ console.log("EMAIL SENT SUCCESSFULLY");
   }
 });
 
-// Serve frontend
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'contact.html'));
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

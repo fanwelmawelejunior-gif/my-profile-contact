@@ -6,13 +6,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!hamburger || !menu) return;
 
-    // Toggle menu on hamburger click
     hamburger.addEventListener("click", function () {
         menu.classList.toggle("active");
-        hamburger.classList.toggle("active"); // X animation
+        hamburger.classList.toggle("active");
     });
 
-    // Close menu when clicking outside
     document.addEventListener("click", function (event) {
         if (!menu.contains(event.target) && !hamburger.contains(event.target)) {
             menu.classList.remove("active");
@@ -20,7 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Close menu when clicking a link
     menu.querySelectorAll("a").forEach(link => {
         link.addEventListener("click", function () {
             menu.classList.remove("active");
@@ -49,13 +46,8 @@ form.addEventListener('submit', async (e) => {
         if (res.ok) {
             const msg = await res.text();
 
-            // Show alert
             alert(msg);
 
-            //  Remove this line so the form stays visible
-            // form.style.display='none';
-
-            // Optional: clear inputs but keep form visible
             form.reset();
 
         } else {
@@ -68,4 +60,3 @@ form.addEventListener('submit', async (e) => {
         alert('Error sending message');
     }
 });
-
